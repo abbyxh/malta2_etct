@@ -1,0 +1,62 @@
+[Allpix]
+log_level = "INFO"
+log_format = "DEFAULT"
+detectors_file = "electrode_position.conf"
+model_paths = ./
+random_seed = 1
+number_of_events = 1
+
+[GeometryBuilderGeant4]
+world_material = "vacuum"
+world_margin_percentage = 0
+world_minimum_margin = 2m 2m 2m
+
+[DepositionLaser]
+log_level = "INFO"
+wavelength = 1064nm
+number_of_photons = 5000
+pulse_duration = 10ps
+source_position = 0mm {{ position }}um -50mm
+beam_direction = 0 0 1
+beam_geometry = "cylindrical"
+beam_waist = 1um
+output_plots = true
+
+#[ElectricFieldReader]
+#model = "parabolic"
+#minimum_field = -500V/cm
+#maximum_field = 4000V/cm
+#minimum_position = 20um
+#output_plots = true
+
+[ElectricFieldReader]
+model = "linear"
+bias_voltage = {{ bias }}V
+depletion_voltage = {{ deplete }}V
+output_plots = true
+
+[WeightingPotentialReader]
+model = "pad"
+output_plots = true
+
+[TransientPropagation]
+temperature = 300K
+integration_time = 25ns
+#output_plots = true
+#output_linegraphs = true
+
+[PulseTransfer]
+output_pulsegraphs = true
+
+[DefaultDigitizer]
+threshold = 260e
+
+[DetectorHistogrammer]
+name = "detector1"
+
+# replace by [VisualizationGeant4] to run the visualization
+[Ignore]
+mode = "gui"
+
+[ROOTObjectWriter]
+exclude = DepositedCharge, PropagatedCharge
