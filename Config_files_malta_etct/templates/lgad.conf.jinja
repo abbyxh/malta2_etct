@@ -1,0 +1,69 @@
+[Allpix]
+log_level = "INFO"
+log_format = "DEFAULT"
+detectors_file = "lgad_detector.conf"
+model_paths = ./
+random_seed = 1
+number_of_events = 10
+
+[GeometryBuilderGeant4]
+world_material = "vacuum"
+world_margin_percentage = 0
+world_minimum_margin = 2m 2m 2m
+
+[DepositionLaser]
+log_level = "INFO"
+
+# Standard wavelength for IR TCT lasers
+wavelength = 1064nm
+number_of_photons = 8000
+pulse_duration = 100ps
+
+# Geometry parameters of the beam
+source_position = {{ x }}um {{ z }}um -50mm
+beam_direction = 0 0 1
+beam_geometry = "cylindrical"
+beam_waist = 8um
+
+[ElectricFieldReader]
+name = "detector1"
+model = "mesh"
+file_name = "big_p50_ElectricField.init"
+field_mapping = "SENSOR"
+output_plots = true
+
+[WeightingPotentialReader]
+name = "detector1"
+model = "mesh"
+file_name = "big_p_weighting.init"
+field_mapping = "PIXEL_FULL"
+output_plots = true
+
+#[WeightingPotentialReader]
+#model = "pad"
+#output_plots = true
+
+[TransientPropagation]
+temperature = 300K
+charge_per_step = 100
+integration_time = 25ns
+output_plots = true
+
+[PulseTransfer]
+output_plots = true
+output_pulsegraphs = true
+
+[DefaultDigitizer]
+threshold = 260e
+electronics_noise = 110e
+#output_plots = true
+
+[DetectorHistogrammer]
+name = "detector1"
+
+# replace by [VisualizationGeant4] to run the visualization
+[Ignore]
+mode = "gui"
+
+[ROOTObjectWriter]
+exclude = DepositedCharge, PropagatedCharge
